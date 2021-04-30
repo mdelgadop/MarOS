@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="robots" content="noindex, nofollow">
+
+    <title>Calculadora</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    
+    <style type="text/css">
+body {
+  background-color: #D0D050;
+}
+
+input[type=button] {
+  height: 51px;
+  width: 100px;
+  color: black;
+  border: none;
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+}
+
+input[type=button]:hover {
+  background-color: #D7DBE1
+}
+
+.btnCifra {
+  background-color: white;
+  font-weight: bold;
+}
+
+.btnOperacion {
+  background-color: #F3F5F2;
+}
+    </style>
+	
+
+</head>
+
+<body>
+    <div class="container-fluid">
+        <div class="row">    
+			<table style="width: 0px;">
+				<tr>
+					<td colspan="4">
+						<input type="text" id="txtCifra" />
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<input type="button" class="btnOperacion" onclick="cuadrado()" value="x^2" />
+					</td>
+					<td>
+						<input type="button" class="btnOperacion" onclick="cubo()" value="x^3" />
+					</td>
+					<td>
+						<input type="button" class="btnOperacion" onclick="borrar()" value="C" />
+					</td>
+					<td>
+						<input type="button" class="btnOperacion" onclick="division()" value="&#247;" />
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<input type="button" class="btnCifra" onclick="nuevaCifra(7)" value="7" />
+					</td>
+					<td>
+						<input type="button" class="btnCifra" onclick="nuevaCifra(8)" value="8" />
+					</td>
+					<td>
+						<input type="button" class="btnCifra" onclick="nuevaCifra(9)" value="9" />
+					</td>
+					<td>
+						<input type="button" class="btnOperacion" onclick="multiplicacion()" value="X" />
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<input type="button" class="btnCifra" onclick="nuevaCifra(4)" value="4" />
+					</td>
+					<td>
+						<input type="button" class="btnCifra" onclick="nuevaCifra(5)" value="5" />
+					</td>
+					<td>
+						<input type="button" class="btnCifra" onclick="nuevaCifra(6)" value="6" />
+					</td>
+					<td>
+						<input type="button" class="btnOperacion" onclick="resta()" value="-" />
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<input type="button" class="btnCifra" onclick="nuevaCifra(1)" value="1" />
+					</td>
+					<td>
+						<input type="button" class="btnCifra" onclick="nuevaCifra(2)" value="2" />
+					</td>
+					<td>
+						<input type="button" class="btnCifra" onclick="nuevaCifra(3)" value="3" />
+					</td>
+					<td>
+						<input type="button" class="btnOperacion" onclick="suma()" value="+" />
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<input type="button" class="btnCifra" onclick="pi()" value="&#928;" />
+					</td>
+					<td>
+						<input type="button" class="btnCifra" onclick="nuevaCifra(0)" value="0" />
+					</td>
+					<td>
+						<input type="button" class="btnCifra" onclick="nuevaCifra('.')" value="." />
+					</td>
+					<td>
+						<input type="button" class="btnOperacion" onclick="igual()" value="=" />
+					</td>
+				</tr>
+			</table>
+        </div> <!-- /.row -->
+    </div> <!-- /.container-fluid -->
+
+	<script src="./operaciones.js"></script>
+</body>
+</html>
