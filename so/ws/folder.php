@@ -13,6 +13,11 @@
 	public $name = ""; 
  }
  
+ class fileContent {
+  public $id;
+  public $content;
+ }
+
  class desktop {
   public $folders;
   public $paths;
@@ -22,115 +27,144 @@
 	
 	if($op=="GetFolders")
 	{
+		$folder_to_check=$_POST['folder'];
+		
+		$folder_father = (($folder_to_check == "" or $folder_to_check == "fld") ? " is null" : "=".substr($folder_to_check, 3));
+		
+		//files
+		$query = "select 'fl' as prefix, fl_id, fl_name, fl_width, fl_left, fl_top, fl_icon, '' as fl_path from files "
+				." where fl_folder_id".$folder_father;
+				
+		$query = $query." union all ";
+		//folders
+		$query = $query."select 'fld' as prefix, fld_id, fld_name, fld_width, fld_left, fld_top, fld_icon, fld_path from folders "
+			   ."where fld_father".$folder_father;
+			   
+		if($folder_to_check != "" and $folder_to_check != "fld")
+		{	
+			//folder parent (navigation to ".." folder
+		    $query = $query." union all "
+			   ."select 'fld' as prefix, fld_father, \"..\", 96, 50, 100, 0, CONCAT(fld_path, \"#\", fld_name) as fld_path from folders where fld_id=".substr($folder_to_check, 3);
+		}
+		
+		$query = $query.";";
+		//echo $query;
+		$array = SQLToArray($query);
+		$complete_path = "";
+		$iObj = 0;
 
-		if($_POST['folder'] == "" or $_POST['folder'] == "fld")
+		$i = 0;
+		while($i<count($array))
 		{
 			$obj1 = new folder;
-			$obj1->id = "fld0";
-			$obj1->name = "Home";
-			$obj1->width = "96";
-			$obj1->left = "50";
-			$obj1->top = "100";
-			$obj1->icon = "folder_home";
-
-			$obj[0] = $obj1;
+			$obj1->id = $array[$i]["prefix"].$array[$i]["fl_id"];
+			$obj1->name = $array[$i]["fl_name"];
+			$obj1->width = "".$array[$i]["fl_width"];
+			$obj1->left = "".$array[$i]["fl_left"];
+			$obj1->top = "".$array[$i]["fl_top"];
+			$complete_path = $array[$i]["fl_path"];
 			
-			$path1 = new path;
-			$path1->name = "Desktop";
-			$paths[0] = $path1;
-		}
-		else if($_POST['folder'] == "fld0")
-		{
-			$obj1 = new folder;
-			$obj1->id = "fld";
-			$obj1->name = "..";
-			$obj1->width = "96";
-			$obj1->left = "50";
-			$obj1->top = "100";
-			$obj1->icon = "folder";
-
-			$obj[0] = $obj1;
-
-			$obj1 = new folder;
-			$obj1->id = "fld1";
-			$obj1->name = "My Files";
-			$obj1->width = "96";
-			$obj1->left = "50";
-			$obj1->top = "200";
-			$obj1->icon = "folder_files";
-
-			$obj[1] = $obj1;
-
-			$obj1 = new folder;
-			$obj1->id = "fld2";
-			$obj1->name = "My Music";
-			$obj1->width = "96";
-			$obj1->left = "150";
-			$obj1->top = "100";
-			$obj1->icon = "folder_music";
-
-			$obj[2] = $obj1;
-						
-			$obj1 = new folder;
-			$obj1->id = "fld3";
-			$obj1->name = "My Images";
-			$obj1->width = "96";
-			$obj1->left = "150";
-			$obj1->top = "200";
-			$obj1->icon = "folder_images";
-
-			$obj[3] = $obj1;
+			$obj1->icon = GetIcon($array[$i]["fl_icon"]);
 			
-			$obj1 = new folder;
-			$obj1->id = "fld4";
-			$obj1->name = "My Videos";
-			$obj1->width = "96";
-			$obj1->left = "250";
-			$obj1->top = "100";
-			$obj1->icon = "folder_videos";
-
-			$obj[4] = $obj1;
-
-			$path1 = new path;
-			$path1->name = "Desktop";
-			$paths[0] = $path1;
-			$path1 = new path;
-			$path1->name = "Home";
-			$paths[1] = $path1;
+			$obj[$iObj] = $obj1;
+			$i++;
+			$iObj++;
 		}
-		else 
+		
+		$array_paths = explode("#", $complete_path);
+		
+		$i = 0;
+		while($i<count($array_paths))
 		{
-			$obj1 = new folder;
-			$obj1->id = "fld0";
-			$obj1->name = "..";
-			$obj1->width = "96";
-			$obj1->left = "50";
-			$obj1->top = "100";
-			$obj1->icon = "folder";
-
-			$obj[0] = $obj1;
-
 			$path1 = new path;
-			$path1->name = "Desktop";
-			$paths[0] = $path1;
-			$path1 = new path;
-			$path1->name = "Home";
-			$paths[1] = $path1;
-			$path1 = new path;
-			$path1->name = "Current folder: ".$_POST['folder'];
-			$paths[2] = $path1;		
+			$path1->name = $array_paths[$i];
+			$paths[$i] = $path1;
+			$i++;
 		}
-
-
+		
 		$mydesktop = new desktop;
 		$mydesktop->folders = $obj;
 		$mydesktop->paths = $paths;
 
 		echo json_encode($mydesktop);
 	}
-	
-	
+	else if($op=="GetFileContent")
+	{
+		$idContent=$_POST['c'];
+		$idContent=substr($idContent, 2);
+		
+		//files
+		$query = "select fl_content from file_contents where fl_id=".$idContent.";";
+				
+		//echo $query;
+		$array = SQLToArray($query);
+		$complete_path = "";
 
+		$i = 0;
+		while($i<count($array))
+		{
+			$obj1 = new fileContent;
+			$obj1->id = $idContent;
+			$obj1->content = $array[$i]["fl_content"];
+			
+			$obj[0] = $obj1;
+			$i++;
+		}
+
+		echo json_encode($obj);
+	}
+	else if($op=="SaveFileContent")
+	{
+		$folder=$_POST['d'];
+		$idContent=$_POST['c'];
+		$nameContent=$_POST['n'];
+		$content=$_POST['con'];
+
+		$obj1 = new fileContent;
+		$obj1->id = $idContent;
+
+		//echo "update file_contents set fl_content='".$content."' where fl_id=".$idContent.";";
+		if($idContent=="")
+		{
+			$query = "insert into files(fl_name, fl_width, fl_left, fl_top, fl_icon, fl_folder_id) values ('".$nameContent."', 96, 250, 250, 6, ".substr($folder, 3).");";
+			$obj1->content = ExecuteSQL($query);
+			
+			if($obj1->content == "200")
+			{
+				$query = "insert into file_contents(fl_content) values ('".$content."');";
+				$obj1->content = ExecuteSQL($query);
+			}
+		}
+		else
+		{
+			$query = "update file_contents set fl_content='".$content."' where fl_id=".substr($idContent, 2).";";
+			$obj1->content = ExecuteSQL($query);
+		}
+		
+		$obj[0] = $obj1;
+
+		echo json_encode($obj);
+
+	}
+	
+	function GetIcon($idIcon)
+	{
+		if($idIcon == "0")
+			return "folder";
+		else if($idIcon == "1")
+			return "folder_home";
+		else if($idIcon == "2")
+			return "folder_files";
+		else if($idIcon == "3")
+			return "folder_music";
+		else if($idIcon == "4")
+			return "folder_images";
+		else if($idIcon == "5")
+			return "folder_videos";
+		else if($idIcon == "6")
+			return "notepad";
+	}
+	
 	function SQLToArray($consulta)
 	{
 		$conn = new mysqli("localhost", "root", "14Laurita", "so");
@@ -161,18 +195,21 @@
 	{
 		$resultado = "500";
 		
-		$mysqli = new mysqli("localhost", "root", "14Laurita", "so");
+		$conn = new mysqli("localhost", "root", "14Laurita", "so");
 
-		if ($mysqli->connect_errno) {
-			printf("Falló la conexión: %s\n", $mysqli->connect_error);
-			exit();
+		if ($conn->connect_errno) {
+			$resultado =  "Falló la conexión: ".$conn->connect_error."\n";
 		}
+		else
+		{
+			if ($conn->query($consulta) === TRUE) {
+			  $resultado = "200";
+			} else {
+			  echo "Error updating record: " . $conn->error;
+			}
 
-		if ($mysqli->query($consulta) === TRUE) {
-			$resultado = "200";
+			$conn->close();
 		}
-
-		$mysqli->close();
 		
 		return $resultado;
 	}

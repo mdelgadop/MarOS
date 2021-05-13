@@ -38,15 +38,26 @@
 					}
 				},
 				error: function (xhr, status, error) {
-				  alert("Error: " + xhr.responseText);
+				  alert("Error: " + xhr.responseText + " - " + error);
 				}
 			});
 		}
 		
 		function navigate(navigateTo)
 		{
-			var url = window.location.origin + window.location.pathname + "?d=" + navigateTo;
-			window.location = url;
+			if(navigateTo.startsWith("fld"))
+			{
+				var url = window.location.origin + window.location.pathname + "?d=" + navigateTo;
+				window.location = url;
+			}
+			else if(navigateTo.startsWith("fl"))
+			{
+				openMWindow('notepad', 470, 345, '<?=$_GET["d"] ?>', navigateTo);
+			}
+			else
+			{
+				alert("Extension not recognized for file " + navigateTo);
+			}
 		}
 	</script> 
 		

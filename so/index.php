@@ -30,13 +30,13 @@
 	
 	<script type="text/javascript">
 		function calculadora() {
-			openMWindow('calc', 415, 300);
+			openMWindow('calc', 415, 300, '<?=$_GET["d"] ?>', '');
 		}
 		function calendario() {
-			openMWindow('cal', 470, 345);
+			openMWindow('cal', 470, 345, '<?=$_GET["d"] ?>', '');
 		}
 		function notepad() {
-			openMWindow('notepad', 470, 345);
+			openMWindow('notepad', 470, 345, '<?=$_GET["d"] ?>', '');
 		}
 	</script> 
 		
