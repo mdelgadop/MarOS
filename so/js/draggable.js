@@ -43,9 +43,27 @@
 		  
 		  
 			function fnSaveCoordinates() {
-				if(elmnt.id.startsWith("fld"))
+				if(elmnt.id.startsWith("fld") || elmnt.id.startsWith("fl"))
 				{
-					//alert('Save folder: ' + elmnt.id + ': ' + elmnt.style.top + " - " + elmnt.style.left);
+					var parametros = {
+						"op" : "SaveCoords",
+						"i" : elmnt.id,
+						"t" : elmnt.style.top,
+						"l" : elmnt.style.left
+					};
+					
+					$.ajax({
+						data:  parametros,
+						url:   './ws/folder.php',
+						dataType : 'json',
+						type:  'post',
+						success:  function (response) {
+							
+						},
+						error: function (xhr, status, error) {
+						  //alert("Error: " + xhr.responseText + " - " + error);
+						}
+					});
 				}
 			}
 		}

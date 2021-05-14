@@ -69,4 +69,5 @@
 		{
 			var myobj = document.getElementById("div" + idToClose);
 			myobj.remove();
+			Inicializar();
 		}
