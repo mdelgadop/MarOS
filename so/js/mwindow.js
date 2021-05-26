@@ -1,15 +1,18 @@
 		var lastId = 0;
 		function openMWindow(app, width, height, dir, idContent) {
 			var iDiv = document.createElement('div');
-			iDiv.innerHTML = createMWindow(getMApp(app)[0], "&nbsp;" + getMApp(app)[1], width, height, dir, idContent);
-			iDiv.id = 'block';
-			iDiv.className = 'block';
-			document.getElementsByTagName('body')[0].appendChild(iDiv);
-			
-			iDiv.style.position = "absolute";
-			iDiv.style.left = "50px";//(50 * lastId) + "px";
-			iDiv.style.top = "100px";//(50 + (50 * lastId)) + "px";
-
+			var myApp = getMApp(app);
+			if(myApp[0] !== '')
+			{
+				iDiv.innerHTML = createMWindow(myApp[0], "&nbsp;" + myApp[1], width, height, dir, idContent);
+				iDiv.id = 'block';
+				iDiv.className = 'block';
+				document.getElementsByTagName('body')[0].appendChild(iDiv);
+				
+				iDiv.style.position = "absolute";
+				iDiv.style.left = "50px";//(50 * lastId) + "px";
+				iDiv.style.top = "100px";//(50 + (50 * lastId)) + "px";
+			}
 			//dragElement(iDiv);
 		}
 		
@@ -29,15 +32,19 @@
 		{
 			if(app==='calc')
 			{
-				return ['./calc/index.html', 'Calculadora'];
+				return ['./calc/index.php', 'Calculadora'];
 			}
 			else if(app==='cal')
 			{
-				return ['./cal/index.html', 'Calendario'];
+				return ['./cal/index.php', 'Calendario'];
 			}
 			else if(app==='notepad')
 			{
 				return ['./notepad/index.html', 'Bloc de notas'];
+			}
+			else if(app==='weather')
+			{
+				return ['./weather/index.php', 'El tiempo'];
 			}
 			else
 			{
