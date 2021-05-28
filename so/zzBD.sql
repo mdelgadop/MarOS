@@ -57,3 +57,27 @@ CREATE TABLE file_contents (
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 insert into file_contents(fl_content) values ('<h2>Hola Mundo</h2><p>Este es un ejemplo de fichero</p>');
+
+--
+-- Table structure for table usuario
+--
+
+DROP TABLE IF EXISTS usuarios;
+CREATE TABLE usuarios (
+  username VARCHAR(255) NOT NULL DEFAULT '',
+  token VARCHAR(12) DEFAULT NULL,
+  password VARCHAR(255) DEFAULT NULL,
+  email VARCHAR(255) DEFAULT NULL,
+  nombre VARCHAR(255) DEFAULT NULL,
+  apellidos VARCHAR(255) DEFAULT NULL,
+  idioma INT DEFAULT NULL,
+  maxdirs INT DEFAULT NULL,
+  maxfiles INT DEFAULT NULL,
+  pendienteconfirmacion TINYINT DEFAULT NULL,
+  coderegistro VARCHAR(255) DEFAULT NULL,
+  fecha_ultimo_acceso DATETIME DEFAULT NULL,
+  PRIMARY KEY (username)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+insert into usuarios values('mdelgado','', 'mdelgado','mdelgado@cc.es','Mario','Delgado Picazo',0,100, 100, 0, '', now());
+update usuarios set password=md5(password) where username='mdelgado';
