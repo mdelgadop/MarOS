@@ -8,49 +8,60 @@
 
 	<div id="resultFolders"></div>
 	
+	<script src="./js/directoryTemplates.js"></script>
+	
 	<script type="text/javascript">
 
+		var myDir = '<?=$dir ?>';
 		Inicializar();
 		function Inicializar(){
 
-			var parametros = {
-				"op" : "GetFolders",
-				"folder" : "<?=$dir ?>"
-			};
-
-			$.ajax({
-				data:  parametros,
-				url:   './ws/folder.php',
-				dataType : 'json',
-				type:  'post',
-				success:  function (response) {
+			var data = new FormData();
+			data.append('op', 'GetFolders');
+			data.append('folder', myDir);
+			
+			fetch('./ws/folder.php', {
+			  method: 'POST', // or 'PUT'
+			  body: data
+			}).then(res => res.json())
+			.then(response => 
+				{
 					if(response!==null)
 					{
-						var template = $.templates("#tmplFolders");
-						var htmlOutput = template.render(response.folders);
+						var index = 0;
+						var htmlOutput2 = "";
+						while(index < response.folders.length)
+						{
+							htmlOutput2 = htmlOutput2 + tmplFolders(response.folders[index].id, response.folders[index].width, response.folders[index].left, response.folders[index].top, response.folders[index].icon, response.folders[index].name);
+							index++;
+						}
 
-						var templateND = $.templates("#tmplFoldersND");
-						var htmlOutputND = templateND.render(response.foldersND);
+						index = 0;
+						while(index < response.foldersND.length)
+						{
+							htmlOutput2 = htmlOutput2 + tmplFoldersND(response.foldersND[index].id, response.foldersND[index].width, response.foldersND[index].left, response.foldersND[index].top, response.foldersND[index].icon, response.foldersND[index].name);
+							index++;
+						}
 
-						$("#resultFolders").html(htmlOutput+htmlOutputND);
+						document.getElementById("resultFolders").innerHTML = htmlOutput2;
+
+						index = 0;
+						htmlOutput2 = "";
+						while(index < response.paths.length)
+						{
+							htmlOutput2 = htmlOutput2 + tmplPaths(response.paths[index].name);
+							index++;
+						}
+
+						document.getElementById("resultPaths").innerHTML = htmlOutput2;
 						
 						for(i = 0; i < response.folders.length; i++) {
 							dragElement(document.getElementById(response.folders[i].id));
 						}
-						
-						for(i = 0; i < response.foldersND.length; i++) {
-							dragElement(document.getElementById(response.foldersND[i].id));
-						}
-
-						var templatePaths = $.templates("#tmplPaths");
-						var htmlOutput2 = templatePaths.render(response.paths);
-						$("#resultPaths").html(htmlOutput2);
 					}
-				},
-				error: function (xhr, status, error) {
-				  alert("Error: " + xhr.responseText + " - " + error);
 				}
-			});
+			)
+			.catch(error => alert('Error: ' + error));
 		}
 		
 		function navigate(navigateTo)
@@ -62,11 +73,12 @@
 			}
 			else if(navigateTo.startsWith("fl"))
 			{
-				openMWindow('notepad', 470, 345, '<?=$_GET["d"] ?>', navigateTo);
+				alert(myDir == '' ? 'fld' : myDir);
+				openMWindow('notepad', 650, 345, myDir == '' ? 'fld' : myDir, navigateTo);
 			}
 			else
 			{
-				alert("Extension not recognized for file " + navigateTo);
+				alert("Format not recognized for file " + navigateTo);
 			}
 		}
 		
@@ -74,51 +86,78 @@
 		{
 			if(confirm("¿Seguro que quieres eliminar el elemento y todo su contenido?"))
 			{
-				var parametros = {
-					"op" : "DelFL",
-					"i" : toDel
-				};
-
-				$.ajax({
-					data:  parametros,
-					url:   './ws/folder.php',
-					dataType : 'json',
-					type:  'post',
-					success:  function (response) {
+				var data = new FormData();
+				data.append('op', 'DelFL');
+				data.append('i', toDel);
+				
+				fetch('./ws/folder.php', {
+				  method: 'POST', // or 'PUT'
+				  body: data
+				}).then(res => res.json())
+				.then(response => 
+					{
 						if(response[0].message==="200")
 						{
 							Inicializar();
 						}
 						else
 						{
-							alert("Error al eliminar " + response[0].message);
+							alert("Error al eliminar: " + response[0].message);
 						}
-					},
-					error: function (xhr, status, error) {
-					  alert("Error: " + xhr.responseText + " - " + error);
 					}
-				});
+				)
+				.catch(error => alert('Error: ' + error));
+			}
+		}
+		
+		function ren(toRen)
+		{
+			var name = prompt("Nuevo nombre", "");
+			
+			if(name !== '' && name !== undefined && name !== null)
+			{
+				var data = new FormData();
+				data.append('op', 'RenFL');
+				data.append('i', toRen);
+				data.append('n', name);
+				
+				fetch('./ws/folder.php', {
+				  method: 'POST', // or 'PUT'
+				  body: data
+				}).then(res => res.json())
+				.then(response => 
+					{
+						if(response[0].message==="200")
+						{
+							Inicializar();
+						}
+						else
+						{
+							alert("Error al renombrar: " + response[0].message);
+						}
+					}
+				)
+				.catch(error => alert('Error: ' + error));
 			}
 		}
 		
 		function createFolder()
 		{
-			var name = prompt("Nombre del directorio", "Nuevo Directorio");;
+			var name = prompt("Nombre del directorio", "Nuevo Directorio");
 			
 			if(name !== '')
 			{
-				var parametros = {
-					"op" : "CreateFolder",
-					"d" : '<?=$dir ?>',
-					"n" : name,
-				};
-
-				$.ajax({
-					data:  parametros,
-					url:   './ws/folder.php',
-					dataType : 'json',
-					type:  'post',
-					success:  function (response) {
+				var data = new FormData();
+				data.append('op', 'CreateFolder');
+				data.append('d', myDir);
+				data.append('n', name);
+				
+				fetch('./ws/folder.php', {
+				  method: 'POST', // or 'PUT'
+				  body: data
+				}).then(res => res.json())
+				.then(response => 
+					{
 						if(response[0].message==="200")
 						{
 							Inicializar();
@@ -127,39 +166,10 @@
 						{
 							alert("Error al guardar documento: " + response[0].message);
 						}
-					},
-					error: function (xhr, status, error) {
-					  alert("Error: " + xhr.responseText + " - " + error);
 					}
-				});
+				)
+				.catch(error => alert('Error: ' + error));
 			}
 		}
-	</script> 
 		
-
-	<script id="tmplPaths" type="text/x-jsrender">
-	<li class="breadcrumb-item active" aria-current="page">{{:name}}</li>
-	</script>
-	
-	<script id="tmplFolders" type="text/x-jsrender">
-		<div id="{{:id}}" class="card border-0" style="position: absolute;width: {{:width}}px;left:{{:left}}px;top:{{:top}}px;" ondblclick="javascript:navigate('{{:id}}')" >
-		<img src="./icons/{{:icon}}.png" class="imagecenter" alt="..." />
-		<div class="dropdown"  style="text-align:center;width: {{:width}}px;">
-		<button type="button" class="btn btn-light btn-block dropdown-toggle" type="button" id="dropdownMenu2" data-bs-toggle="dropdown" aria-expanded="false" style="white-space:normal;display:inline-flex;padding:0px;">
-			{{:name}}
-		</button>
-		  <ul class="dropdown-menu" aria-labelledby="dropdownMenu2" style="padding:0px">
-			<li><a class="dropdown-item alert alert-danger" href="javascript:del('{{:id}}')" style="padding:4px;margin:0px">Delete</a></li>
-		  </ul>
-		</div>
-
-		</div>
-
-	</script>
-
-	<script id="tmplFoldersND" type="text/x-jsrender">
-	<div id="{{:id}}" class="card border-0" style="position: absolute;width: {{:width}}px;left:{{:left}}px;top:{{:top}}px;" ondblclick="javascript:navigate('{{:id}}')" >
-		<img src="./icons/{{:icon}}.png" class="imagecenter" alt="..." />
-		<p style="text-align:center;">{{:name}}</p>
-	</div>
-	</script>
+	</script> 

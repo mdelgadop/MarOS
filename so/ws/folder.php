@@ -61,6 +61,15 @@
 		
 		echo json_encode($obj);
 	}
+	else if($op=="RenFL")
+	{
+		$RenFLI = $_POST['i'];
+		$NewName = $_POST['n'];
+		
+		include("RenFLService/index.php");
+		
+		echo json_encode($obj);
+	}
 	else if($op=="CreateFolder")
 	{
 		$CreateFolderFolder = $_POST['d']; 

@@ -40,30 +40,22 @@
 				document.onmousemove = null;
 				fnSaveCoordinates();
 			}
-		  
-		  
+
 			function fnSaveCoordinates() {
-				if(elmnt.id.startsWith("fld") || elmnt.id.startsWith("fl"))
+				if(elmnt.id != myDir && elmnt.id.startsWith("fld") || elmnt.id.startsWith("fl"))
 				{
-					var parametros = {
-						"op" : "SaveCoords",
-						"i" : elmnt.id,
-						"t" : elmnt.style.top,
-						"l" : elmnt.style.left
-					};
+					var data = new FormData();
+					data.append('op', 'SaveCoords');
+					data.append('i', elmnt.id);
+					data.append('t', elmnt.style.top);
+					data.append('l', elmnt.style.left);
 					
-					$.ajax({
-						data:  parametros,
-						url:   './ws/folder.php',
-						dataType : 'json',
-						type:  'post',
-						success:  function (response) {
-							
-						},
-						error: function (xhr, status, error) {
-						  //alert("Error: " + xhr.responseText + " - " + error);
-						}
-					});
+					fetch('./ws/folder.php', {
+					  method: 'POST', // or 'PUT'
+					  body: data
+					}).then(res => res.json())
+					.then(response => { } )
+					.catch(error => { } );
 				}
 			}
 		}
