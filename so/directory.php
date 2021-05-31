@@ -73,7 +73,6 @@
 			}
 			else if(navigateTo.startsWith("fl"))
 			{
-				alert(myDir == '' ? 'fld' : myDir);
 				openMWindow('notepad', 650, 345, myDir == '' ? 'fld' : myDir, navigateTo);
 			}
 			else

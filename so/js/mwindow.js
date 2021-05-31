@@ -62,11 +62,14 @@
 			 + "    </div> "
 			 + "    <div class=\"col\" style=\"margin:0px;padding:0px;\"> "
 			 + "	  <div class=\"card-header text-end\" style=\"padding:0px;\">" 
+			 + "	    <div class=\"btn-group\" role=\"group\" aria-label=\"Basic example\">" 
+			 + "		  <button type=\"button\" class=\"btn btn-primary btn-sm\" onclick=\"minMDiv('" + name + "', " + lastId + ")\">_</button>"
 			 + "		  <button type=\"button\" class=\"btn btn-primary btn-sm\" onclick=\"closeMDiv(" + lastId + ")\">x</button>"
+			 + "	    </div>" 
 			 + "	  </div>" 
 			 + "    </div> "
 			 + "  </div> "
-			 + "	  <div class=\"card-body\" style=\"padding:0px;\">" 
+			 + "	  <div class=\"card-body\" style=\"padding:0px;height:100%\">" 
 			 + "		<iframe src=\"" + destiny + "?d=" + dir + "&c=" + idContent + "\" style=\"width:100%; height:100%\" style=\"border:none;\" title=\"...\" />" 
 			 + "	  </div>" 
 			 + "	</div>";
@@ -78,3 +81,30 @@
 			myobj.remove();
 			Inicializar();
 		}
+		
+		function minMDiv(name, idToClose)
+		{
+			var myobj = document.getElementById("div" + idToClose);
+			myobj.style.display = 'none';
+			
+			var dme = document.getElementById("divMinimizedElements");
+			
+			dme.innerHTML = dme.innerHTML + getButtonMinimize(name, idToClose);
+		}
+		
+		function maxMDiv(name, idToClose)
+		{
+			var myobj = document.getElementById("div" + idToClose);
+			myobj.style.display = 'block';
+			
+			var btnMax = document.getElementById("btnMax" + idToClose);
+			btnMax.remove();
+		}
+		
+		function getButtonMinimize(name, idToClose)
+		{
+			return "<button id=\"btnMax" + idToClose + "\" type=\"button\" class=\"btn btn-light\" style=\"margin-right:2px\" data-bs-toggle=\"dropdown\" aria-expanded=\"false\" onclick=\"maxMDiv('" + name + "', '" + idToClose + "')\">"
+			  + name
+			  + "</button>";
+		}
+		
