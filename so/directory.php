@@ -140,6 +140,35 @@
 			}
 		}
 		
+		function zip(toRen)
+		{
+			if(confirm("¿Desea crear un zip con todo su contenido?"))
+			{
+				var data = new FormData();
+				data.append('op', 'zip');
+				data.append('i', toRen);
+				
+				fetch('./ws/folder.php', {
+				  method: 'POST', // or 'PUT'
+				  body: data
+				}).then(res => res.json())
+				.then(response => 
+					{
+						alert(JSON.stringify(response));
+						if(response[0].message==="200")
+						{
+							Inicializar();
+						}
+						else
+						{
+							alert("Error al comprimir: " + response[0].message);
+						}
+					}
+				)
+				.catch(error => alert('Error: ' + error));
+			}
+		}
+		
 		function createFolder()
 		{
 			var name = prompt("Nombre del directorio", "Nuevo Directorio");

@@ -79,6 +79,14 @@
 		
 		echo json_encode($obj);
 	}
+	else if($op=="zip")
+	{
+		$IdZip = $_POST['i'];
+		
+		include("ZipService/index.php");
+		
+		echo json_encode($obj);
+	}
 	
 	function GetIcon($idIcon)
 	{
@@ -96,6 +104,21 @@
 			return "folder_videos";
 		else if($idIcon == "6")
 			return "notepad";
+		else if($idIcon == "7")
+			return "zip";
+	}
+		
+	function startsWith( $haystack, $needle ) {
+		 $length = strlen( $needle );
+		 return substr( $haystack, 0, $length ) === $needle;
+	}
+
+	function endsWith( $haystack, $needle ) {
+		$length = strlen( $needle );
+		if( !$length ) {
+			return true;
+		}
+		return substr( $haystack, -$length ) === $needle;
 	}
 	
 	function SQLToArray($consulta)

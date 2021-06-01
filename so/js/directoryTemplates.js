@@ -22,6 +22,7 @@
 			+ "</button>"
 			+ "<ul class=\"dropdown-menu\" aria-labelledby=\"dropdownMenu2\" style=\"padding:0px\">"
 				+ "<li><a class=\"dropdown-item alert alert-light\" href=\"javascript:ren('" + id + "')\" style=\"padding:4px;margin:0px\">Rename</a></li>"
+				+ "<li><a class=\"dropdown-item alert alert-light\" href=\"javascript:zip('" + id + "')\" style=\"padding:4px;margin:0px\">Zip</a></li>"
 				+ "<li><a class=\"dropdown-item alert alert-danger\" href=\"javascript:del('" + id + "')\" style=\"padding:4px;margin:0px\">Delete</a></li>"
 			+ "</ul>"
 			+ "</div>"
