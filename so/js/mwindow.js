@@ -46,6 +46,10 @@
 			{
 				return ['./weather/index.php', 'El tiempo'];
 			}
+			else if(app==='rockpaperscissor')
+			{
+				return ['./games/rock-paper-scisson/index.html', 'Piedra Papel Tijera'];
+			}
 			else
 			{
 				return ['', ''];

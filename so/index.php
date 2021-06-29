@@ -39,6 +39,9 @@
 		function weather() {
 			openMWindow('weather', 800, 450, '<?=$_GET["d"] ?>', '');
 		}
+		function rockpaperscissor() {
+			openMWindow('rockpaperscissor', 500, 420, '<?=$_GET["d"] ?>', '');
+		}
 	</script> 
 		
 <body>
@@ -56,6 +59,12 @@
 			<li><a class="dropdown-item" href="javascript:calculadora()">Calculadora</a></li>
 			<li><a class="dropdown-item" href="javascript:calendario()">Calendario</a></li>
 			<li><a class="dropdown-item" href="javascript:weather()">El tiempo</a></li>
+			<li class="dropdown-submenu">
+				<a class="dropdown-item" tabindex="-1" href="#">Juegos</a>
+				<ul class="dropdown-menu">
+				  <li><a class="dropdown-item" href="javascript:rockpaperscissor()">Piedra Papel Tijera</a></li>
+				</ul>
+			</li>
 			<li><hr class="dropdown-divider"></li>
 			<li class="dropdown-submenu">
 				<a class="dropdown-item" tabindex="-1" href="#">Idiomas</a>

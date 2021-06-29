@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="robots" content="noindex, nofollow">
+
+    <title>Rock Paper Scissors</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="../../style/bootstrap.min.css" rel="stylesheet" />
+		
+	<script>
+	
+	function optionChoosen(option) {
+		document.getElementById("divMyChoice").style.visibility = "";
+		document.getElementById("divVS").style.visibility = "";
+		document.getElementById("divYourChoice").style.visibility = "";
+		document.getElementById('imgMyChoice').src='./icons/' + option + '.png'
+
+		var elementResultGame = document.getElementById("resultGame");
+		elementResultGame.classList.remove("text-success");
+		elementResultGame.classList.remove("text-danger");
+		elementResultGame.innerHTML = "vs.";
+
+		chooseYourOption(option, 0);
+	}
+	
+	function chooseYourOption(option, counter)
+	{
+		if(counter < 21)
+		{
+			counter++;
+			var youroption = 'scissor';
+			if(counter % 3 == 0)
+				youroption = 'rock';
+			else if(counter % 3 == 1)
+				youroption = 'paper';
+			
+			document.getElementById('imgYourChoice').src='./icons/' + youroption + '.png'
+			
+			setTimeout(function(){ chooseYourOption(option, counter); }, 100);
+		}
+		else
+		{
+			var elementResultGame = document.getElementById("resultGame");
+			var resultGame = "You have tied!";
+			var num = Math.random() * 3;
+			var youroption = 'scissor';
+			
+			if(num < 1)
+			{
+				youroption = 'rock';
+				if(option == 'paper')
+				{
+					resultGame = "You win!";
+					elementResultGame.classList.add("text-success");
+				}
+				else if(option == 'scissor')
+				{
+					resultGame = "You lose!";
+					elementResultGame.classList.add("text-danger");
+				}
+			}
+			else if(num < 2)
+			{
+				youroption = 'paper';
+				if(option == 'scissor')
+				{
+					resultGame = "You win!";
+					elementResultGame.classList.add("text-success");
+				}
+				else if(option == 'rock')
+				{
+					resultGame = "You lose!";
+					elementResultGame.classList.add("text-danger");
+				}
+			}
+			else
+			{
+				youroption = 'scissor';
+				if(option == 'rock')
+				{
+					resultGame = "You win!";
+					elementResultGame.classList.add("text-success");
+				}
+				else if(option == 'paper')
+				{
+					resultGame = "You lose!";
+					elementResultGame.classList.add("text-danger");
+				}
+			}
+			
+			document.getElementById('imgYourChoice').src='./icons/' + youroption + '.png'
+			elementResultGame.innerHTML = resultGame;
+		}
+	}
+	
+	</script>
+	
+</head>
+
+<body>
+    <div class="container-fluid">
+		<br/>
+		<h2 class="text-center">Rock Paper Scissors</h2>
+		<br/>
+		<h5>Choose one:</h5>
+		<div class="row">
+			<div class="col-4">
+				<button class="btn" onclick="optionChoosen('rock')">
+					<img src="./icons/rock.png" class="img-fluid" alt="...">
+				</button>
+			</div>
+			<div class="col-4">
+				<button class="btn" onclick="optionChoosen('paper')">
+					<img src="./icons/paper.png" class="img-fluid" alt="...">
+				</button>
+			</div>
+			<div class="col-4">
+				<button class="btn" onclick="optionChoosen('scissor')">
+					<img src="./icons/scissor.png" class="img-fluid" alt="...">
+				</button>
+			</div>
+			
+			<div class="col-4" id="divMyChoice" style="visibility:hidden">
+				<img id="imgMyChoice" src="./icons/paper.png" class="img-fluid" alt="...">
+			</div>
+			<div class="col-4" id="divVS" style="visibility:hidden">
+				<h2 id="resultGame" class="text-center position-relative top-50 start-0">vs.</h2>
+			</div>
+			<div class="col-4" id="divYourChoice" style="visibility:hidden">
+				<img id="imgYourChoice" src="./icons/paper.png" class="img-fluid" alt="...">
+			</div>
+		</div>
+		<br/>
+		<h2 id="resultGame2" class="text-center"></h2>
+		
+    </div> <!-- /.container-fluid -->
+
+</body>
+</html>
